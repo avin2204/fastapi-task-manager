@@ -39,6 +39,8 @@ jobs:
 
           pip install pytest aiosqlite
 
+          pip install httpx
+
 
       - name: Run Tests
         run: |
