@@ -1,23 +1,31 @@
+import uuid
+
 from .conftest import client
 
 
 def get_token():
 
-    # Register user first
+    unique_id = uuid.uuid4().hex[:8]
+
+    unique_username = f"user_{unique_id}"
+
+    unique_email = f"{unique_id}@test.com"
+
+    # Register User
     client.post(
         "/register",
         json={
-            "username": "avin",
-            "email": "avin@test.com",
+            "username": unique_username,
+            "email": unique_email,
             "password": "123456"
         }
     )
 
-    # Login user
+    # Login User
     login_response = client.post(
         "/login",
         json={
-            "email": "avin@test.com",
+            "email": unique_email,
             "password": "123456"
         }
     )
@@ -128,3 +136,4 @@ def test_delete_task():
     assert response.status_code == 200
 
     assert response.json()["message"] == "Task deleted successfully"
+    
