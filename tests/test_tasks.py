@@ -3,6 +3,17 @@ from .conftest import client
 
 def get_token():
 
+    # Register user first
+    client.post(
+        "/register",
+        json={
+            "username": "avin",
+            "email": "avin@test.com",
+            "password": "123456"
+        }
+    )
+
+    # Login user
     login_response = client.post(
         "/login",
         json={
