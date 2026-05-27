@@ -1,5 +1,32 @@
+# Virtual Environment
 venv/
+
+
+# Python Cache
 __pycache__/
-.env
-.pytest_cache/
 *.pyc
+
+
+# SQLite Database
+*.db
+
+
+# Environment Variables
+.env
+
+
+# VS Code
+.vscode/
+
+
+# Pytest Cache
+.pytest_cache/
+
+
+# Alembic Cache
+alembic/__pycache__/
+
+
+# OS Files
+.DS_Store
+Thumbs.db
