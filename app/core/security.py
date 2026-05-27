@@ -13,28 +13,49 @@ from dotenv import load_dotenv
 import os
 
 
-# Load environment variables
+# =========================
+# LOAD ENV VARIABLES
+# =========================
+
 load_dotenv()
 
 
-# Environment Variables
-SECRET_KEY = os.getenv("SECRET_KEY", "mysupersecretkey")
+# =========================
+# ENVIRONMENT VARIABLES
+# =========================
 
-ALGORITHM = os.getenv("ALGORITHM", "HS256")
+SECRET_KEY = os.getenv(
+    "SECRET_KEY",
+    "mysupersecretkey"
+)
+
+ALGORITHM = os.getenv(
+    "ALGORITHM",
+    "HS256"
+)
 
 ACCESS_TOKEN_EXPIRE_MINUTES = int(
-    os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)
+    os.getenv(
+        "ACCESS_TOKEN_EXPIRE_MINUTES",
+        30
+    )
 )
 
 
-# Password Hashing
+# =========================
+# PASSWORD HASHING
+# =========================
+
 pwd_context = CryptContext(
     schemes=["bcrypt"],
     deprecated="auto"
 )
 
 
-# OAuth2 Scheme
+# =========================
+# OAUTH2 SCHEME
+# =========================
+
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="login"
 )
