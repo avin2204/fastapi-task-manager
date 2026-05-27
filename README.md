@@ -1,4 +1,13 @@
-FastAPI Task Manager Backend
+## 🌍 Live API
+
+🔗 Swagger Documentation:
+https://fastapi-task-manager-lt6l.onrender.com/docs
+
+🔗 Live Backend URL:
+https://fastapi-task-manager-lt6l.onrender.com
+
+
+Project Name - FastAPI Task Manager Backend
 
 A production-style backend project built with FastAPI, PostgreSQL, SQLAlchemy, Async APIs, Docker, and JWT Authentication.
 
