@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.database import SessionLocal
+from app.database import get_db
 from app.models.user_model import User
 from app.schemas.user_schema import UserCreate, UserLogin
 
@@ -16,15 +16,17 @@ router = APIRouter()
 
 
 @router.post("/register")
-def register_user(user: UserCreate):
-
-    db: Session = SessionLocal()
+def register_user(
+    user: UserCreate,
+    db: Session = Depends(get_db)
+):
 
     hashed_password = hash_password(
         user.password
     )
 
     new_user = User(
+
         username=user.username,
         email=user.email,
         password=hashed_password
@@ -43,15 +45,17 @@ def register_user(user: UserCreate):
 
 
 @router.post("/login")
-def login_user(user: UserLogin):
-
-    db: Session = SessionLocal()
+def login_user(
+    user: UserLogin,
+    db: Session = Depends(get_db)
+):
 
     db_user = db.query(User).filter(
         User.email == user.email
     ).first()
 
     if not db_user:
+
         return {
             "message": "Invalid Email"
         }
@@ -62,6 +66,7 @@ def login_user(user: UserLogin):
     )
 
     if not password_check:
+
         return {
             "message": "Invalid Password"
         }
