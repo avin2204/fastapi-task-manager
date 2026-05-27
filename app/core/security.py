@@ -2,7 +2,7 @@ from passlib.context import CryptContext
 
 from jose import JWTError, jwt
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 
 from fastapi import Depends, HTTPException, status
 
@@ -13,32 +13,45 @@ from dotenv import load_dotenv
 import os
 
 
+# Load environment variables
 load_dotenv()
 
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+# Environment Variables
+SECRET_KEY = os.getenv("SECRET_KEY", "mysupersecretkey")
+
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
+
+ACCESS_TOKEN_EXPIRE_MINUTES = int(
+    os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30)
+)
 
 
-ALGORITHM = "HS256"
-
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
-
+# Password Hashing
 pwd_context = CryptContext(
     schemes=["bcrypt"],
     deprecated="auto"
 )
 
 
+# OAuth2 Scheme
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl="login"
 )
 
 
+# =========================
+# HASH PASSWORD
+# =========================
+
 def hash_password(password: str):
 
     return pwd_context.hash(password)
 
+
+# =========================
+# VERIFY PASSWORD
+# =========================
 
 def verify_password(
     plain_password,
@@ -51,11 +64,15 @@ def verify_password(
     )
 
 
+# =========================
+# CREATE JWT TOKEN
+# =========================
+
 def create_access_token(data: dict):
 
     to_encode = data.copy()
 
-    expire = datetime.utcnow() + timedelta(
+    expire = datetime.now(UTC) + timedelta(
         minutes=ACCESS_TOKEN_EXPIRE_MINUTES
     )
 
@@ -72,6 +89,10 @@ def create_access_token(data: dict):
     return encoded_jwt
 
 
+# =========================
+# VERIFY JWT TOKEN
+# =========================
+
 def verify_access_token(
     token: str
 ):
@@ -87,6 +108,7 @@ def verify_access_token(
         email = payload.get("sub")
 
         if email is None:
+
             return None
 
         return email
@@ -95,6 +117,10 @@ def verify_access_token(
 
         return None
 
+
+# =========================
+# GET CURRENT USER
+# =========================
 
 def get_current_user(
     token: str = Depends(oauth2_scheme)
